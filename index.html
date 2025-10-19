@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قبة | موقع إسلامي متكامل</title>
+    <meta name="theme-color" content="#00897b">
+    
+    <!-- Manifest File for PWA -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts (Cairo & Amiri for Quran) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Moment.js for Hijri Calendar -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-hijri/2.1.2/moment-hijri.min.js"></script>
+</head>
+<body class="transition-colors duration-300">
+    <audio id="ayah-audio-player" class="hidden"></audio>
+
+    <!-- Side Quick Access Bar -->
+    <div class="fixed top-1/2 -translate-y-1/2 right-4 z-40">
+        <div class="card p-2 space-y-3 flex flex-col items-center">
+            <a href="#quran" onclick="showPage('quran', this)" title="القرآن الكريم" class="side-nav-link">
+                <i class="fas fa-book-quran w-6 text-center"></i>
+            </a>
+            <a href="#prayer" onclick="showPage('prayer', this)" title="أوقات الصلاة والقبلة" class="side-nav-link">
+                <i class="fas fa-compass w-6 text-center"></i>
+            </a>
+            <a href="#azkar" onclick="showPage('azkar', this)" title="الأذكار" class="side-nav-link">
+                <i class="fas fa-shield-heart w-6 text-center"></i>
+            </a>
+            <a href="#radio" onclick="showPage('radio', this)" title="الإذاعة" class="side-nav-link">
+                <i class="fas fa-broadcast-tower w-6 text-center"></i>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-opacity-90 backdrop-blur-md" style="background-color: var(--card-light);">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center">
+                    <a href="#home" class="text-3xl font-bold flex items-center gap-3" style="color: var(--primary-color);">
+                        <i class="fas fa-mosque"></i><span class="hidden sm:inline">قبة</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-1 lg:space-x-2">
+                    <a href="#home" class="nav-link active" onclick="showPage('home', this)"><i class="fas fa-home"></i><span class="nav-text">الرئيسية</span></a>
+                    <a href="#quran" class="nav-link" onclick="showPage('quran', this)"><i class="fas fa-book-quran"></i><span class="nav-text">القرآن</span></a>
+                    <a href="#hadith" class="nav-link" onclick="showPage('hadith', this)"><i class="fas fa-book-open-reader"></i><span class="nav-text">الحديث</span></a>
+                    <a href="#azkar" class="nav-link" onclick="showPage('azkar', this)"><i class="fas fa-shield-heart"></i><span class="nav-text">الأذكار</span></a>
+                    <a href="#dua" class="nav-link" onclick="showPage('dua', this)"><i class="fas fa-person-praying"></i><span class="nav-text">الأدعية</span></a>
+                    <a href="#radio" class="nav-link" onclick="showPage('radio', this)"><i class="fas fa-broadcast-tower"></i><span class="nav-text">الإذاعة</span></a>
+                    
+                    <div class="dropdown">
+                        <button class="nav-link"><i class="fas fa-toolbox"></i><span class="nav-text">أدوات</span></button>
+                        <div class="dropdown-content">
+                            <a href="#prayer" class="dropdown-link" onclick="showPage('prayer', this)"><i class="fas fa-compass fa-fw"></i>القبلة والصلاة</a>
+                            <a href="#tasbeeh" class="dropdown-link" onclick="showPage('tasbeeh', this)"><i class="fas fa-hands-praying fa-fw"></i>السبحة</a>
+                            <a href="#zakat-calculator" class="dropdown-link" onclick="showPage('zakat-calculator', this)"><i class="fas fa-hand-holding-dollar fa-fw"></i>حاسبة الزكاة</a>
+                            <a href="#calendar" class="dropdown-link" onclick="showPage('calendar', this)"><i class="fas fa-calendar-alt fa-fw"></i>التقويم الهجري</a>
+                        </div>
+                    </div>
+                     <div class="dropdown">
+                        <button class="nav-link"><i class="fas fa-search-plus"></i><span class="nav-text">اكتشف</span></button>
+                        <div class="dropdown-content">
+                            <a href="#discover" class="dropdown-link" onclick="showPage('discover', this, 'pillars-islam')"><i class="fas fa-kaaba fa-fw"></i>أركان الإسلام والإيمان</a>
+                            <a href="#seerah" class="dropdown-link" onclick="showPage('seerah', this)"><i class="fas fa-person-walking fa-fw"></i>السيرة النبوية</a>
+                            <a href="#discover" class="dropdown-link" onclick="showPage('discover', this, 'names-allah')"><i class="fas fa-star-and-crescent fa-fw"></i>أسماء الله الحسنى</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <button id="theme-toggle" class="p-3 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                        <i id="theme-toggle-icon" class="fas fa-sun"></i>
+                    </button>
+                    <button id="mobile-menu-button" class="md:hidden ml-2 p-3 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4 space-y-2">
+                <a href="#home" class="block py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700" onclick="showPage('home', this)">الرئيسية</a>
+                <a href="#quran" class="block py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700" onclick="showPage('quran', this)">القرآن الكريم</a>
+                <a href="#hadith" class="block py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700" onclick="showPage('hadith', this)">الحديث الشريف</a>
+                <a href="#azkar" class="block py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700" onclick="showPage('azkar', this)">الأذكار</a>
+                <a href="#dua" class="block py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700" onclick="showPage('dua', this)">أدعية</a>
+                <a href="#radio" class="block py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700" onclick="showPage('radio', this)">الإذاعة</a>
+                <a href="#seerah" class="block py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700" onclick="showPage('seerah', this)">السيرة النبوية</a>
+                <a href="#prayer" class="block py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700" onclick="showPage('prayer', this)">القبلة والصلاة</a>
+                <a href="#tasbeeh" class="block py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700" onclick="showPage('tasbeeh', this)">السبحة</a>
+                <a href="#zakat-calculator" class="block py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700" onclick="showPage('zakat-calculator', this)">حاسبة الزكاة</a>
+                <a href="#calendar" class="block py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700" onclick="showPage('calendar', this)">التقويم الهجري</a>
+                <a href="#discover" class="block py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700" onclick="showPage('discover', this)">اكتشف الإسلام</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- Home Page -->
+        <section id="home" class="page space-y-8">
+            <div class="card text-center">
+                <h1 class="text-3xl sm:text-4xl font-bold mb-2 quran-text" style="color: var(--primary-color);">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</h1>
+                <p class="text-lg opacity-70">"أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ" (الرعد: 28)</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="card text-center">
+                    <h2 class="text-xl font-bold mb-4 flex items-center justify-center gap-3"><i class="fas fa-calendar-alt" style="color: var(--primary-color);"></i> التقويم الهجري</h2>
+                    <div id="hijri-widget"></div>
+                </div>
+                <div class="card text-center md:col-span-2">
+                    <h2 class="text-xl font-bold mb-4 flex items-center justify-center gap-3"><i class="fas fa-clock" style="color: var(--primary-color);"></i> وقت الصلاة القادمة</h2>
+                    <div id="next-prayer-widget" class="text-lg flex justify-center items-center gap-6">جاري تحديد موقعك...</div>
+                    <div class="mt-4">
+                        <button onclick="showPage('prayer', this)" class="btn btn-sm">تغيير المدينة</button>
+                        <button id="notifications-btn" class="btn btn-sm">تفعيل التنبيهات</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div id="daily-recitation-player">
+                    <div class="flex justify-between items-center mb-2">
+                        <p class="text-sm font-semibold opacity-70">تلاوة اليوم: سورة الفتح</p>
+                        <p id="daily-recitation-time" class="text-sm font-mono opacity-70">00:00</p>
+                    </div>
+                    <canvas id="daily-recitation-canvas" class="w-full h-16"></canvas>
+                    <audio id="daily-recitation-audio" src="https://archive.org/download/quran-abs-as-vf/048.mp3" preload="metadata"></audio>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="card">
+                    <h2 class="text-xl font-bold mb-4 flex items-center gap-3"><i class="fas fa-book-quran text-yellow-500"></i> آية اليوم</h2>
+                    <div id="ayah-of-the-day" class="text-lg leading-relaxed min-h-[100px]"></div>
+                </div>
+                 <div class="card">
+                    <h2 class="text-xl font-bold mb-4 flex items-center justify-center gap-3"><i class="fas fa-book-open-reader text-green-700"></i> حديث اليوم</h2>
+                    <div id="hadith-of-the-day" class="text-lg leading-relaxed min-h-[100px]"></div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Quran Page -->
+        <section id="quran" class="page hidden">
+            <div class="card">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl sm:text-3xl font-bold">القرآن الكريم</h2>
+                    <button id="goto-bookmark-btn" class="btn btn-sm"><i class="fas fa-bookmark"></i> الذهاب للعلامة</button>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="surah-list"></div>
+            </div>
+            <div id="surah-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+                <div class="card w-full max-w-4xl max-h-[90vh] flex flex-col">
+                    <div class="flex justify-between items-center pb-4 border-b dark:border-gray-600">
+                        <h3 id="surah-modal-title" class="text-2xl font-bold"></h3>
+                        <div class="flex items-center gap-2">
+                            <button class="btn btn-sm" id="font-decrease-btn"><i class="fas fa-minus"></i></button>
+                            <button class="btn btn-sm" id="font-increase-btn"><i class="fas fa-plus"></i></button>
+                            <button id="close-modal" class="p-2 rounded-full text-2xl hover:bg-gray-200 dark:hover:bg-gray-700">&times;</button>
+                        </div>
+                    </div>
+                    <div id="surah-modal-content" class="py-6 overflow-y-auto">
+                         <!-- Surah content is injected here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Radio Page -->
+        <section id="radio" class="page hidden">
+            <h2 class="text-2xl sm:text-3xl font-bold mb-8 text-center">إذاعة القرآن الكريم</h2>
+            <div id="radio-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                <!-- Radio stations will be injected here -->
+            </div>
+        </section>
+
+        <!-- Hadith Page -->
+        <section id="hadith" class="page hidden">
+            <h2 class="text-2xl sm:text-3xl font-bold mb-8 text-center">مكتبة الحديث</h2>
+            <div class="card">
+                <input type="text" id="hadith-search" placeholder="ابحث عن حديث..." class="w-full p-3 rounded-lg border dark:border-gray-600 bg-transparent mb-6">
+                <div id="hadith-list" class="space-y-4 max-h-[70vh] overflow-y-auto"></div>
+            </div>
+        </section>
+
+        <!-- Dua Page -->
+        <section id="dua" class="page hidden">
+            <h2 class="text-2xl sm:text-3xl font-bold mb-8 text-center">حصن المسلم - أدعية</h2>
+            <div class="card">
+                <div id="dua-tabs" class="flex flex-wrap justify-center gap-2 md:gap-4 mb-6"></div>
+                <div id="dua-content" class="space-y-6"></div>
+            </div>
+        </section>
+        
+        <!-- Seerah Page -->
+        <section id="seerah" class="page hidden">
+            <h2 class="text-2xl sm:text-3xl font-bold mb-8 text-center">السيرة النبوية</h2>
+            <div class="card">
+                <div id="seerah-tabs" class="flex flex-wrap justify-center gap-2 md:gap-4 mb-6"></div>
+                <div id="seerah-content" class="space-y-4 leading-loose p-2"></div>
+            </div>
+        </section>
+
+        <!-- Calendar Page -->
+        <section id="calendar" class="page hidden">
+             <h2 class="text-2xl sm:text-3xl font-bold mb-8 text-center">التقويم الإسلامي</h2>
+             <div class="card">
+                 <div class="flex justify-between items-center mb-6">
+                     <button id="prev-month-btn" class="btn"><i class="fas fa-chevron-right"></i></button>
+                     <h3 id="calendar-title" class="text-xl font-bold"></h3>
+                     <button id="next-month-btn" class="btn"><i class="fas fa-chevron-left"></i></button>
+                 </div>
+                 <div id="calendar-headers" class="grid grid-cols-7 gap-2 mb-2"></div>
+                 <div id="calendar-grid"></div>
+             </div>
+             <div class="card mt-8">
+                 <h3 class="text-xl font-bold mb-4">مناسبات إسلامية هامة</h3>
+                 <ul id="islamic-events" class="list-disc pr-6 space-y-2"></ul>
+             </div>
+        </section>
+
+
+        <!-- Azkar Page -->
+        <section id="azkar" class="page hidden">
+            <h2 class="text-2xl sm:text-3xl font-bold mb-8 text-center">حصن المسلم - أذكار</h2>
+            <div class="card">
+                <div id="azkar-tabs" class="flex flex-wrap justify-center gap-2 md:gap-4 mb-6"></div>
+                <div id="azkar-content" class="space-y-6"></div>
+            </div>
+        </section>
+
+        <!-- Tasbeeh Page -->
+        <section id="tasbeeh" class="page hidden">
+            <h2 class="text-2xl sm:text-3xl font-bold mb-8 text-center">السبحة الإلكترونية</h2>
+            <div class="card text-center">
+                <p id="tasbeeh-text" class="text-2xl mb-6 opacity-80">سبحان الله</p>
+                <div id="tasbeeh-display" class="w-48 h-48 text-5xl sm:w-52 sm:h-52 sm:text-6xl">0</div>
+                <div class="mt-8 flex flex-wrap justify-center gap-4">
+                    <button class="btn btn-primary px-8 py-4 text-xl" onclick="incrementTasbeeh()">تسبيح</button>
+                    <button class="btn px-8 py-4 text-xl" onclick="resetTasbeeh()">إعادة</button>
+                </div>
+                 <div class="mt-8 border-t dark:border-gray-600 pt-6">
+                     <h3 class="text-lg font-semibold mb-4">اختر الذكر:</h3>
+                     <div class="flex flex-wrap justify-center gap-3">
+                         <button class="btn" onclick="setTasbeehText('سبحان الله')">سبحان الله</button>
+                         <button class="btn" onclick="setTasbeehText('الحمد لله')">الحمد لله</button>
+                         <button class="btn" onclick="setTasbeehText('الله أكبر')">الله أكبر</button>
+                         <button class="btn" onclick="setTasbeehText('لا إله إلا الله')">لا إله إلا الله</button>
+                     </div>
+                 </div>
+            </div>
+        </section>
+        
+        <!-- Zakat Calculator Page -->
+        <section id="zakat-calculator" class="page hidden">
+             <h2 class="text-2xl sm:text-3xl font-bold mb-8 text-center">حاسبة الزكاة</h2>
+             <div class="card max-w-2xl mx-auto">
+                 <p class="mb-6 opacity-70">هذه الحاسبة لمساعدتك على حساب زكاة المال. نصاب الزكاة هو ما يعادل قيمة 85 جرامًا من الذهب الخالص (عيار 24)، ويجب أن يكون قد مر عليه عام هجري كامل وهو في حوزتك.</p>
+                 <div class="space-y-4">
+                     <div>
+                         <label for="cash" class="font-semibold">المال النقدي والمدخر (الذي حال عليه الحول)</label>
+                         <input type="number" id="cash" placeholder="أدخل المبلغ بعملتك المحلية" class="w-full mt-2 p-3 rounded-lg border dark:border-gray-600 bg-transparent focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                     </div>
+                      <div>
+                         <label for="gold-price" class="font-semibold">سعر جرام الذهب اليوم (عيار 24)</label>
+                         <input type="number" id="gold-price" value="3500" class="w-full mt-2 p-3 rounded-lg border dark:border-gray-600 bg-transparent focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                     </div>
+                 </div>
+                 <button class="btn btn-primary w-full mt-8 text-lg" onclick="calculateZakat()">احسب الزكاة</button>
+                 <div id="zakat-result" class="mt-6 text-center"></div>
+             </div>
+        </section>
+        
+        <!-- Discover Islam Page -->
+        <section id="discover" class="page hidden">
+             <h2 id="discover-title" class="text-2xl sm:text-3xl font-bold mb-8 text-center transition-all">اكتشف الإسلام</h2>
+             <div id="discover-detail-content">
+                 <div class="card space-y-6">
+                     <div id="pillars-islam" class="discover-detail hidden space-y-4 leading-loose"></div>
+                     <div id="articles-faith" class="discover-detail hidden space-y-4 leading-loose"></div>
+                     <div id="names-allah" class="discover-detail hidden">
+                         <div id="names-grid-detail" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+                     </div>
+                 </div>
+             </div>
+        </section>
+
+        <!-- Prayer Times & Qibla Page -->
+        <section id="prayer" class="page hidden">
+             <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                 <div class="lg:col-span-3 card">
+                     <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-center">أوقات الصلاة</h2>
+                     <div class="flex flex-col sm:flex-row gap-4 mb-4">
+                         <select id="country-select" class="w-full p-2 rounded-lg border dark:border-gray-600 bg-transparent"></select>
+                         <select id="city-select" class="w-full p-2 rounded-lg border dark:border-gray-600 bg-transparent"></select>
+                     </div>
+                     <p id="location-info" class="text-center mb-6 opacity-70">اختر دولة ومدينة لعرض أوقات الصلاة</p>
+                     <div id="prayer-times-table" class="space-y-4"></div>
+                 </div>
+                 <div class="lg:col-span-2 card flex flex-col items-center justify-center">
+                     <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-center">اتجاه القبلة</h2>
+                     <button id="qibla-permission-btn" class="btn btn-primary mb-6">تفعيل البوصلة</button>
+                     <p id="qibla-error" class="text-red-500 text-center mb-4 hidden"></p>
+                     <div id="compass-container">
+                         <div id="qibla-arrow"></div>
+                     </div>
+                     <p id="qibla-info" class="text-center font-semibold mt-4">الاتجاه: <span id="qibla-direction">...</span> درجة</p>
+                 </div>
+             </div>
+        </section>
+
+    </main>
+
+    <!-- Radio Player Bar -->
+    <div id="radio-player-bar" class="fixed bottom-0 left-0 right-0 z-50 p-2 sm:p-4 transition-transform duration-500 translate-y-full">
+        <div class="card max-w-xl mx-auto p-3 sm:p-4 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3 overflow-hidden">
+                <img id="radio-player-img" src="" class="w-12 h-12 sm:w-16 sm:h-16 rounded-lg object-cover flex-shrink-0">
+                <div class="overflow-hidden">
+                    <p class="font-bold truncate text-sm sm:text-base" id="radio-player-name">...</p>
+                    <p class="text-xs sm:text-sm opacity-70" id="radio-player-status">...</p>
+                </div>
+            </div>
+    
+            <div id="radio-waveform" class="w-20 sm:w-24 h-8 flex items-center justify-center gap-px overflow-hidden">
+                <!-- Bars here -->
+            </div>
+    
+            <div class="flex items-center gap-2">
+                <button id="radio-play-pause-btn" class="w-12 h-12 text-xl rounded-full btn btn-primary flex items-center justify-center flex-shrink-0"></button>
+                <button id="radio-close-btn" class="w-10 h-10 sm:w-12 sm:h-12 text-lg sm:text-xl rounded-full btn flex items-center justify-center flex-shrink-0"><i class="fas fa-times"></i></button>
+                <audio id="radio-audio-element" class="hidden"></audio>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="mt-12 py-8">
+        <div class="container mx-auto px-4">
+            <!-- Developer Profile Card -->
+            <div class="max-w-3xl mx-auto mb-8">
+                <h3 class="text-xl font-bold text-center mb-6 opacity-80">المطور</h3>
+                <div class="card p-6">
+                    <div class="flex flex-col md:flex-row items-center md:items-start md:gap-8">
+                        <!-- Left Side: Image and Basic Info -->
+                        <div class="flex-shrink-0 text-center">
+                            <img src="IMG_20251017_182821781_HDR_PORTRAIT.jpg" alt="Mohamed Zayed" class="w-24 h-24 rounded-full mx-auto shadow-lg border-4 border-white dark:border-gray-800">
+                            <div class="mt-4">
+                                 <h4 class="text-xl font-bold flex items-center justify-center gap-2">
+                                    <span>Mohamed Zayed</span>
+                                    <i class="fas fa-check-circle text-teal-500" title="Verified"></i>
+                                 </h4>
+                                <p class="opacity-70">مهندس برمجيات</p>
+                            </div>
+                        </div>
+
+                        <!-- Vertical Divider -->
+                        <div class="w-full md:w-px bg-gray-200 dark:bg-gray-700 h-px md:h-auto my-6 md:my-0"></div>
+
+                        <!-- Right Side: Details, Stats, and Socials -->
+                        <div class="flex-1 text-center md:text-right">
+                            <p class="text-base opacity-80 leading-relaxed mb-6">
+                               يركز على بناء تطبيقات ويب بسيطة وسهلة الاستخدام، تجمع بين الأداء القوي والتصميم الجذاب لتقديم أفضل تجربة للمستخدم.
+                            </p>
+                            
+                            <!-- Stats & Socials Combined -->
+                            <div class="flex flex-col sm:flex-row justify-between items-center gap-6">
+                                <!-- Stats -->
+                                <div class="flex justify-center items-center gap-6 text-sm">
+                                    <a href="https://www.linkedin.com/in/mohamed-zayed-1b6b2323a/" target="_blank" class="profile-stat-link">
+                                        <span class="font-bold text-lg">5K</span>
+                                        <span class="text-xs opacity-70 block">متابع</span>
+                                    </a>
+                                    <a href="https://github.com/mohamedzayed1" target="_blank" class="profile-stat-link">
+                                        <span class="font-bold text-lg">150+</span>
+                                        <span class="text-xs opacity-70 block">مشروع</span>
+                                    </a>
+                                    <a href="https://www.facebook.com/profile.php?id=100010356265738" target="_blank" class="profile-stat-link">
+                                        <span class="font-bold text-lg">1</span>
+                                        <span class="text-xs opacity-70 block">صديق</span>
+                                    </a>
+                                </div>
+                                <!-- Social Links -->
+                                 <div class="text-2xl flex justify-center gap-5">
+                                    <a href="https://www.linkedin.com/in/mohamed-zayed-1b6b2323a/" target="_blank" class="social-link" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                                    <a href="https://github.com/mohamedzayed1" target="_blank" class="social-link" title="GitHub"><i class="fab fa-github"></i></a>
+                                    <a href="https://www.facebook.com/profile.php?id=100010356265738" target="_blank" class="social-link" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                                    <a href="https://www.instagram.com/mohamed_zayed7?igsh=MXc4dzd3d21tMDF1eA==" target="_blank" class="social-link" title="Instagram"><i class="fab fa-instagram"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Copyright -->
+            <div class="text-center opacity-60 mt-8">
+                <p>&copy; 2025 - قبة. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-5 right-5 bg-green-500 text-white py-2 px-4 rounded-lg shadow-lg opacity-0 translate-x-full transition-all duration-300 z-50">
+        تم نسخ النص!
+    </div>
+    
+    <script src="script.js"></script>
+    <script>
+        // Register Service Worker for offline functionality
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('ServiceWorker registration failed: ', error);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
+

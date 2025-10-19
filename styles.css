@@ -1,0 +1,358 @@
+/* --- Base Styles & Custom Properties --- */
+:root {
+    --primary-color: #00897b; /* Teal Green */
+    --secondary-color: #ffc107; /* Amber */
+    --bg-light: #eef2f3;
+    --bg-dark: #121212;
+    --card-light: #ffffff;
+    --card-dark: #1e1e1e;
+    --text-light: #263238;
+    --text-dark: #e0e0e0;
+    --shadow-light-1: #d1d9e6;
+    --shadow-light-2: #ffffff;
+    --shadow-dark-1: #0a0a0a;
+    --shadow-dark-2: #282828;
+    --quran-text-light: #37474f;
+    --quran-text-dark: #b0bec5;
+    --quran-font-size: 1.7rem; /* Default Quran font size */
+}
+
+body {
+    font-family: 'Cairo', sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-light);
+    padding-bottom: 120px; /* Add padding for the player bar */
+}
+
+/* --- Dark Mode --- */
+html.dark {
+    --bg-light: var(--bg-dark);
+    --card-light: var(--card-dark);
+    --text-light: var(--text-dark);
+    --shadow-light-1: var(--shadow-dark-1);
+    --shadow-light-2: var(--shadow-dark-2);
+}
+
+/* --- Neumorphic Card Style --- */
+.card {
+    background-color: var(--card-light);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 8px 8px 16px var(--shadow-light-1), -8px -8px 16px var(--shadow-light-2);
+    transition: all 0.3s ease-in-out;
+}
+
+/* --- Header & Navigation --- */
+.nav-link {
+    position: relative;
+    transition: color 0.3s, background-color 0.3s;
+    padding: 8px 12px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Gap between icon and text */
+}
+.nav-link .nav-text {
+    display: none; /* Hide text on small screens */
+}
+@media (min-width: 1024px) { /* Show text on lg screens */
+     .nav-link .nav-text {
+        display: inline;
+    }
+}
+.nav-link:hover, .dropdown-link:hover {
+    color: var(--primary-color);
+    background-color: #e0f2f1;
+}
+html.dark .nav-link:hover, html.dark .dropdown-link:hover {
+    background-color: #263238;
+}
+.nav-link.active {
+    color: var(--primary-color);
+    font-weight: 700;
+    background-color: #e0f2f1;
+}
+html.dark .nav-link.active {
+    background-color: #263238;
+}
+
+/* Dropdown Menu */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--card-light);
+    min-width: 220px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 10;
+    border-radius: 12px;
+    padding: 8px 0;
+    margin-top: 8px;
+    left: 0; /* Align to the left for RTL */
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+.dropdown-link {
+    padding: 12px 16px;
+    display: flex; /* Use flex for icon alignment */
+    align-items: center;
+    gap: 10px;
+    text-align: right;
+    border-radius: 8px;
+    margin: 4px;
+}
+
+
+/* --- Quran Text Style --- */
+.quran-ayah, .quran-text {
+    font-family: 'Amiri', serif;
+    font-size: var(--quran-font-size);
+    line-height: 2.9;
+    color: var(--quran-text-light);
+}
+html.dark .quran-ayah, html.dark .quran-text {
+    color: var(--quran-text-dark);
+}
+.quran-ayah-container {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+html.dark .quran-ayah-container { border-bottom-color: #37474f; }
+.quran-ayah-container:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.ayah-number {
+    color: var(--primary-color);
+    font-family: 'Cairo', sans-serif;
+    font-size: 1rem;
+    font-weight: bold;
+}
+.tafsir-text {
+    background-color: rgba(0, 137, 123, 0.05);
+    padding: 1rem;
+    margin-top: 1rem;
+    border-radius: 10px;
+    font-size: 1rem;
+    line-height: 1.8;
+    border-right: 3px solid var(--primary-color);
+}
+html.dark .tafsir-text {
+     background-color: rgba(0, 137, 123, 0.1);
+}
+.active-tab {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* --- Highlight Style for Discover Islam --- */
+.highlight {
+    background-color: rgba(255, 193, 7, 0.15);
+    color: #b8860b;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+}
+html.dark .highlight {
+     background-color: rgba(255, 193, 7, 0.2);
+     color: var(--secondary-color);
+}
+
+/* --- General Button Style --- */
+.btn {
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 4px 4px 8px var(--shadow-light-1), -4px -4px 8px var(--shadow-light-2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.btn:hover {
+     transform: translateY(-2px);
+     box-shadow: 6px 6px 12px var(--shadow-light-1), -6px -6px 12px var(--shadow-light-2);
+}
+.btn:active {
+     transform: translateY(1px);
+     box-shadow: inset 4px 4px 8px var(--shadow-light-1), inset -4px -4px 8px var(--shadow-light-2);
+}
+.btn-primary {
+     background-color: var(--primary-color);
+     color: white;
+}
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 0.875rem;
+    border-radius: 8px;
+}
+
+/* --- Tasbeeh --- */
+#tasbeeh-display {
+    font-weight: 700;
+    line-height: 1;
+    padding: 2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem auto;
+    box-shadow: inset 8px 8px 16px var(--shadow-light-1), inset -8px -8px 16px var(--shadow-light-2);
+    color: var(--primary-color);
+}
+
+/* --- Qibla Compass --- */
+#compass-container {
+    width: 150px;
+    height: 150px;
+    position: relative;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 6px 6px 12px var(--shadow-light-1), inset -6px -6px 12px var(--shadow-light-2);
+}
+#qibla-arrow {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 70px solid var(--primary-color);
+    transform-origin: bottom center;
+    transition: transform 0.5s ease-out;
+    position: absolute;
+    bottom: 50%;
+}
+
+/* --- Azkar Tabs --- */
+.azkar-tab {
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+.azkar-tab.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+.azkar-card.completed {
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 0 15px rgba(0, 137, 123, 0.3);
+    opacity: 0.7;
+}
+
+/* --- Radio Styles --- */
+.radio-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+.radio-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+.radio-card img {
+    transition: transform 0.3s ease;
+}
+.radio-card:hover img {
+    transform: scale(1.1);
+}
+.radio-card.playing {
+    box-shadow: 0 0 0 4px var(--primary-color);
+}
+
+#radio-player-bar.active {
+    transform: translateY(0);
+}
+
+#radio-waveform span {
+    width: 3px;
+    border-radius: 2px;
+    background-color: var(--primary-color);
+    animation: wave 1.2s ease-in-out infinite alternate;
+}
+
+#radio-waveform.paused span {
+     animation-play-state: paused;
+}
+
+@keyframes wave {
+    from { transform: scaleY(0.1); }
+    to { transform: scaleY(1); }
+}
+
+/* --- Homepage Audio Player --- */
+ #daily-recitation-player {
+    background-color: var(--card-light);
+    border-radius: 20px;
+    padding: 16px;
+ }
+ #daily-recitation-canvas {
+    cursor: pointer;
+ }
+
+/* --- Calendar --- */
+#calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+.calendar-day {
+    padding: 10px;
+    text-align: center;
+    border-radius: 8px;
+    min-height: 70px;
+}
+.calendar-day.today {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: bold;
+}
+.calendar-day.other-month {
+    opacity: 0.4;
+}
+.calendar-header {
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+}
+
+
+/* --- Custom Scrollbar --- */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-light); }
+::-webkit-scrollbar-thumb { background: #bdbdbd; border-radius: 10px; }
+html.dark ::-webkit-scrollbar-thumb { background: #424242; }
+
+/* --- Side Navigation --- */
+.side-nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-size: 1.1rem;
+    color: var(--text-light);
+    transition: all 0.2s ease;
+    box-shadow: 4px 4px 8px var(--shadow-light-1), -4px -4px 8px var(--shadow-light-2);
+}
+.side-nav-link:hover {
+    background-color: var(--primary-color);
+    color: white;
+    transform: scale(1.1);
+}
+.side-nav-link:active {
+    box-shadow: inset 4px 4px 8px var(--shadow-light-1), inset -4px -4px 8px var(--shadow-light-2);
+    transform: scale(0.95);
+}
+html.dark .side-nav-link {
+    color: var(--text-dark);
+}
